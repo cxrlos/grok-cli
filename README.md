@@ -1,118 +1,160 @@
-# Grok CLI
+# Grok CLI 🚀
 
-A command-line interface (CLI) tool for interacting with the Grok API, inspired by `claude-code`. This tool provides an interactive session for conversing with the Grok model, with support for file and directory context, command execution, and conversation history.
+> **The intelligent command-line companion for developers**
 
-## Features
+A powerful, agent-style CLI tool that brings the Grok AI model directly to your terminal. Think of it as your personal AI pair programmer that understands your codebase, suggests improvements, and helps you write better code - all through natural conversation.
 
-- **Grok API Integration**: Direct integration with the official Grok API
-- **File & Directory Context**: Read file contents and recursively scan directories
-- **Interactive Chat Loop**: Conversational interface with the Grok model
-- **Command Execution**: Parse and execute shell commands with confirmation
-- **Conversation History**: Maintain context across multiple interactions
-- **Performance**: Handle large amounts of context gracefully
+## ✨ Features
 
-## Installation
+### 🤖 **Agent-Style Interaction**
+- **Conversational AI**: Chat naturally with Grok about your code
+- **Context Awareness**: Automatically understands your project structure
+- **Memory**: Maintains conversation history for iterative development
+- **Smart Suggestions**: Get intelligent code suggestions and explanations
 
-### Development Installation
+### 📁 **Intelligent Context Management**
+- **Auto-Scan**: Automatically reads and understands your project files
+- **Directory Trees**: Visual representation of your project structure
+- **File Analysis**: Deep understanding of your codebase
+- **Multi-Format Support**: Works with Python, JavaScript, TypeScript, and 50+ file types
 
-1. Clone the repository:
-   ```bash
-   git clone <repository-url>
-   cd grok-cli
-   ```
+### ⚡ **Command Execution**
+- **Safe Execution**: Confirms shell commands before running
+- **Real-time Output**: See command results as they happen
+- **Safety Checks**: Built-in protection against dangerous commands
+- **Smart Parsing**: Automatically detects code blocks and shell commands
 
-2. Create a virtual environment:
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate  # On macOS/Linux
-   # or
-   venv\Scripts\activate     # On Windows
-   ```
+### 🛠 **Developer-Friendly**
+- **Zero Configuration**: Works out of the box with your Grok API key
+- **Simple Interface**: Just `grok-cli` or `grok-cli <path>`
+- **Rich Output**: Beautiful, informative terminal interface
+- **Cross-Platform**: Works on macOS, Linux, and Windows
 
-3. Install the package in development mode:
-   ```bash
-   pip install -e .
-   ```
+## 🚀 Quick Start
 
-4. Verify installation:
-   ```bash
-   grok-cli --help
-   ```
-
-### Production Installation
-
+### 1. Install
 ```bash
 pip install grok-cli
 ```
 
-## Usage
-
+### 2. Configure
+Set your Grok API key:
 ```bash
-# Basic usage
-grok-cli
-
-# With specific files or directories
-grok-cli --file path/to/file.py --dir path/to/directory
+export GROK_API_KEY="your-api-key-here"
 ```
 
-## Development
+### 3. Use
+```bash
+# Chat with Grok about your current project
+grok-cli
 
-### Project Structure
+# Chat with Grok about a specific file or directory
+grok-cli src/
+grok-cli app.py
+```
+
+## 📖 Usage Examples
+
+### **Code Review & Analysis**
+```bash
+grok-cli src/
+# Ask: "What are the main issues with this codebase?"
+# Ask: "How can I improve the error handling?"
+# Ask: "Suggest refactoring for the User class"
+```
+
+### **Debugging Help**
+```bash
+grok-cli debug.py
+# Ask: "Why is this function failing?"
+# Ask: "What's wrong with this error message?"
+# Ask: "How can I fix this bug?"
+```
+
+### **Feature Development**
+```bash
+grok-cli
+# Ask: "Help me implement user authentication"
+# Ask: "Create a function to validate email addresses"
+# Ask: "How should I structure this new feature?"
+```
+
+### **Learning & Documentation**
+```bash
+grok-cli complex_algorithm.py
+# Ask: "Explain how this algorithm works"
+# Ask: "What are the time and space complexities?"
+# Ask: "Write documentation for this function"
+```
+
+## 🏗 Architecture
+
+Built with production-grade modular architecture:
 
 ```
 grok-cli/
-├── src/
-│   └── grok_cli/
-│       ├── __init__.py
-│       ├── main.py
-│       ├── api/           # Grok API integration
-│       ├── cli/           # Command-line interface
-│       └── utils/         # Utility functions
-├── tests/                 # Test suite
-├── docs/                  # Documentation
-├── pyproject.toml         # Package configuration
-└── README.md
+├── core/           # Business logic & session management
+├── api/            # Grok API integration
+├── services/       # Application services & dependency injection
+├── utils/          # Utilities (file handling, command parsing)
+└── cli/            # Clean command-line interface
 ```
 
-### Development Dependencies
+## 🔧 Configuration
 
-Install development dependencies:
+### Environment Variables
+- `GROK_API_KEY`: Your Grok API key (required)
+- `MODEL_NAME`: Specific Grok model to use (optional)
 
+### API Key Setup
+1. Get your API key from [x.ai](https://x.ai)
+2. Set the environment variable:
+   ```bash
+   export GROK_API_KEY="your-key-here"
+   ```
+3. Or create a `.env` file:
+   ```
+   GROK_API_KEY=your-key-here
+   MODEL_NAME=grok-4-0709
+   ```
+
+## 🛡 Safety Features
+
+- **Command Confirmation**: All shell commands require explicit approval
+- **Dangerous Command Detection**: Built-in protection against risky operations
+- **Safe Defaults**: Conservative approach to command execution
+- **Clear Feedback**: Always shows what commands will be executed
+
+## 🧪 Development
+
+### Local Development
 ```bash
-pip install -e ".[dev]"
-```
+# Clone and setup
+git clone <repository>
+cd grok-cli
+python3 -m venv venv
+source venv/bin/activate
+pip install -e .
 
-### Running Tests
-
-```bash
+# Run tests
 pytest
-```
 
-### Code Formatting
-
-```bash
+# Format code
 black src/ tests/
 isort src/ tests/
 ```
 
-### Type Checking
-
-```bash
-mypy src/
+### Project Structure
+```
+grok-cli/
+├── src/grok_cli/      # Main package
+├── tests/             # Test suite
+├── docs/              # Documentation
+├── pyproject.toml     # Package configuration
+└── README.md          # This file
 ```
 
-## Configuration
-
-The tool uses environment variables for configuration:
-
-- `GROK_API_KEY`: Your Grok API key (required)
-- `GROK_API_BASE_URL`: Grok API base URL (optional, defaults to official endpoint)
-
-## License
-
-MIT License - see LICENSE file for details.
-
-## Contributing
+## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -121,12 +163,29 @@ MIT License - see LICENSE file for details.
 5. Ensure all tests pass
 6. Submit a pull request
 
-## Status
+## 📄 License
 
-**Phase 1 Complete**: Project scaffolding and dependencies set up
-- ✅ Project structure created
-- ✅ Dependencies defined in pyproject.toml
-- ✅ Console script entry point configured
-- ✅ Basic CLI framework implemented
+MIT License - see [LICENSE](LICENSE) file for details.
 
-**Next**: Phase 2 - Core CLI and File Handling
+## 🆘 Support
+
+- **Issues**: [GitHub Issues](https://github.com/yourusername/grok-cli/issues)
+- **Documentation**: [GitHub Wiki](https://github.com/yourusername/grok-cli/wiki)
+- **Discussions**: [GitHub Discussions](https://github.com/yourusername/grok-cli/discussions)
+
+## 🎯 Why Grok CLI?
+
+- **Productive**: Get instant help with coding tasks
+- **Intelligent**: Understands context and provides relevant suggestions
+- **Safe**: Built-in protections for command execution
+- **Simple**: Clean, intuitive interface
+- **Powerful**: Full access to Grok's capabilities
+
+---
+
+**Ready to supercharge your development workflow?** 🚀
+
+```bash
+pip install grok-cli
+grok-cli
+```
