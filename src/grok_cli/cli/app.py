@@ -1,35 +1,45 @@
 """Main CLI application for grok-cli."""
 
 import click
+from pathlib import Path
 from rich.console import Console
-from rich.panel import Panel
+
+from grok_cli.services.app_factory import AppFactory
 
 console = Console()
 
 
 @click.command()
-@click.version_option(version="0.1.0")
-@click.help_option()
-def main() -> None:
+@click.argument("path", required=False)
+def main(path: str = None) -> None:
     """Grok CLI - A command-line interface for interacting with Grok API.
 
-    This tool provides an interactive session for conversing with the Grok model,
-    with support for file and directory context, command execution, and conversation history.
+    Usage:
+        grok-cli                    # Use current directory as context
+        grok-cli <file_or_dir>      # Use specific file or directory as context
     """
-    console.print(
-        Panel(
-            "[bold blue]Grok CLI[/bold blue]\n"
-            "[dim]A CLI tool for interacting with Grok API[/dim]\n\n"
-            "[yellow]Phase 1 Complete: Project scaffolding and dependencies set up![/yellow]\n"
-            "Ready for Phase 2: Core CLI and File Handling",
-            title="Welcome",
-            border_style="blue",
+    try:
+        # Parse context path
+        context_path = None
+        if path:
+            context_path = Path(path)
+            if not context_path.exists():
+                console.print(f"[red]✗[/red] Path does not exist: {path}")
+                return
+
+        # Create and start the application using the factory
+        agent = AppFactory.create_app_with_context(context_path)
+
+    except ValueError as e:
+        console.print(f"[red]✗[/red] {e}")
+        console.print(
+            "[yellow]Please set your GROK_API_KEY environment variable:[/yellow]"
         )
-    )
-    console.print("\n[green]✓[/green] Project structure created")
-    console.print("[green]✓[/green] Dependencies defined in pyproject.toml")
-    console.print("[green]✓[/green] Console script entry point configured")
-    console.print("\n[dim]Next: Implement file and directory handling...[/dim]")
+        console.print("export GROK_API_KEY='your-api-key-here'")
+        return
+    except Exception as e:
+        console.print(f"[red]✗[/red] Failed to initialize application: {e}")
+        return
 
 
 if __name__ == "__main__":
