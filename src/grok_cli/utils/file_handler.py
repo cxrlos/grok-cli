@@ -3,7 +3,7 @@
 import os
 import sys
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Any
 
 from rich.console import Console
 from rich.syntax import Syntax
@@ -324,7 +324,7 @@ def read_file_contents(file_path: Path, max_size: int = 1024 * 1024) -> Optional
         return None
 
 
-def scan_directory(directory_path: Path, max_depth: int = 3) -> Dict[str, any]:
+def scan_directory(directory_path: Path, max_depth: int = 3) -> Dict[str, Any]:
     """
     Recursively scan a directory and create a tree structure.
 
@@ -353,10 +353,26 @@ def scan_directory(directory_path: Path, max_depth: int = 3) -> Dict[str, any]:
     }
 
     try:
-        for item in sorted(directory_path.iterdir()):
+        # Get all items in directory
+        items = list(directory_path.iterdir())
+
+        # Filter out items that should be skipped
+        valid_items = []
+        for item in items:
             if item.name.startswith("."):
                 continue
+            if item.is_dir() and should_skip_directory(item.name):
+                continue
+            valid_items.append(item)
 
+        # If no valid items, return empty result (skip empty folders)
+        if not valid_items:
+            return {}
+
+        # Sort items for consistent output
+        valid_items.sort()
+
+        for item in valid_items:
             if item.is_file() and is_text_file(item):
                 file_content = read_file_contents(item)
                 if file_content is not None:
@@ -370,10 +386,13 @@ def scan_directory(directory_path: Path, max_depth: int = 3) -> Dict[str, any]:
                         }
                     )
 
-            elif item.is_dir() and not should_skip_directory(item.name):
+            elif item.is_dir():
                 if max_depth > 0:
                     sub_result = scan_directory(item, max_depth - 1)
-                    if sub_result:
+                    # Only add subdirectory if it has content (not empty)
+                    if sub_result and (
+                        sub_result.get("files") or sub_result.get("directories")
+                    ):
                         result["directories"].append(sub_result)
                         result["contents"][item.name] = sub_result
 
@@ -384,7 +403,11 @@ def scan_directory(directory_path: Path, max_depth: int = 3) -> Dict[str, any]:
         console.print(f"[red]Error scanning {directory_path}: {e}[/red]")
         return {}
 
-    return result
+    # Only return result if it has content (files or non-empty subdirectories)
+    if result["files"] or result["directories"]:
+        return result
+    else:
+        return {}  # Skip empty folders
 
 
 def format_directory_tree(directory_data: Dict, indent: str = "") -> str:
