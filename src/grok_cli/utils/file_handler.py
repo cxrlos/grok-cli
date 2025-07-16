@@ -8,6 +8,8 @@ from typing import Dict, List, Optional, Tuple
 from rich.console import Console
 from rich.syntax import Syntax
 
+from grok_cli.utils.ui import get_file_emoji, FOLDER_EMOJI
+
 console = Console()
 
 # Common text file extensions that we can read
@@ -246,14 +248,15 @@ def format_directory_tree(directory_data: Dict, indent: str = "") -> str:
     name = directory_data.get("name", "")
 
     # Add directory line
-    lines.append(f"{indent}📁 {name}/")
+    lines.append(f"{indent}{FOLDER_EMOJI} {name}/")
 
     # Add files
     for file_info in directory_data.get("files", []):
         file_name = file_info["name"]
         file_size = file_info["size"]
+        emoji = get_file_emoji(file_name)
         size_str = f" ({file_size} bytes)" if file_size > 1024 else ""
-        lines.append(f"{indent}  📄 {file_name}{size_str}")
+        lines.append(f"{indent}  {emoji} {file_name}{size_str}")
 
     # Add subdirectories
     for subdir in directory_data.get("directories", []):

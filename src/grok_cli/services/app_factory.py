@@ -42,14 +42,14 @@ class AppFactory:
         """Create a complete application with context.
 
         Args:
-            context_path: Optional path to use as context
+            context_path: Optional path to use as context (None for no context)
 
         Returns:
             Configured Grok agent ready for session
         """
         agent = AppFactory.create_agent()
 
-        # Start the session with the given context
+        # Start the session with the given context (or None for no context)
         agent.start_session(context_path)
 
         return agent

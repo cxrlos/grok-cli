@@ -42,7 +42,15 @@ class GrokAgent:
         Args:
             context_path: Optional path to use as context (file or directory)
         """
-        self._setup_context(context_path)
+        if context_path is not None:
+            self._setup_context(context_path)
+        else:
+            # No context provided, start with empty context
+            from rich.console import Console
+
+            console = Console()
+            console.print("[dim]Starting session without context...[/dim]")
+
         self._run_interactive_loop()
 
     def _setup_context(self, context_path: Optional[Path] = None) -> None:
